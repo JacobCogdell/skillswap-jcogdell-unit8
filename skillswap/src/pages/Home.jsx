@@ -1,6 +1,18 @@
+import { useState } from "react";
+import { filterSkillsByCategory } from "../skillswap-functions.js";
 import SkillCard from "../components/SkillCard";
 
+const skills = [
+  { title: "Python Tutoring", category: "Programming", price: 20 },
+  { title: "Guitar Lessons", category: "Music", price: 15 },
+  { title: "Resume Review", category: "Career", price: 0 },
+  { title: "Web Development", category: "Programming", price: 25 }
+];
+
 function Home() {
+  const [selectedCategory, setSelectedCategory] = useState("All");
+  const filteredSkills = filterSkillsByCategory(skills, selectedCategory);
+
   return (
     <main>
       <section className="hero">
@@ -11,34 +23,25 @@ function Home() {
       <section className="skills-section">
         <h3>Available Skills</h3>
 
+        {/* Filter Buttons */}
+        <div className="filters">
+          <button onClick={() => setSelectedCategory("All")}>All</button>
+          <button onClick={() => setSelectedCategory("Programming")}>Programming</button>
+          <button onClick={() => setSelectedCategory("Music")}>Music</button>
+          <button onClick={() => setSelectedCategory("Career")}>Career</button>
+        </div>
+
+        {/* Dynamic Skill Cards */}
         <div className="skills-grid">
-          <SkillCard
-            title="React Coding"
-            description="Learn modern React development including hooks, components, and state management."
-            price={50}
-            provider="Dan Abramov"
-          />
-
-          <SkillCard
-            title="Calculus"
-            description="Master derivatives, integrals, limits, and real-world applications."
-            price={40}
-            provider="Isaac Newton"
-          />
-
-          <SkillCard
-            title="Physics"
-            description="Explore motion, energy, relativity, and the laws that govern the universe."
-            price={45}
-            provider="Albert Einstein"
-          />
-
-          <SkillCard
-            title="Chemistry"
-            description="Understand atoms, molecules, reactions, and the foundations of chemical science."
-            price={35}
-            provider="Marie Curie"
-          />
+          {filteredSkills.map((skill, index) => (
+            <SkillCard
+              key={index}
+              title={skill.title}
+              description={`Category: ${skill.category}`}
+              price={skill.price}
+              provider="Skill Provider"
+            />
+          ))}
         </div>
       </section>
     </main>
