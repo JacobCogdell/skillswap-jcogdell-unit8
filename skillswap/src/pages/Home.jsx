@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { filterSkillsByCategory, calculateTotalCosts } from "../skillswap-functions.js";
+import { filterSkillsByCategory, calculateTotalCosts, matchSkillsToUser } from "../skillswap-functions.js";
 import SkillCard from "../components/SkillCard";
 
 const skills = [
@@ -22,6 +22,21 @@ function Home() {
   function handleCalculate() {
     const result = calculateTotalCosts(Number(rate), Number(hours));
     setTotalCost(result);
+  }
+
+  // Match Skills state
+  const [matchCategory, setMatchCategory] = useState("");
+  const [matchPrice, setMatchPrice] = useState("");
+  const [matchedSkills, setMatchedSkills] = useState([]);
+
+  function handleMatchSkills() {
+    const userNeeds = {
+      category: matchCategory,
+      maxPrice: Number(matchPrice)
+    };
+
+    const result = matchSkillsToUser(userNeeds, skills);
+    setMatchedSkills(result);
   }
 
   return (
@@ -85,6 +100,47 @@ function Home() {
         {totalCost !== null && (
           <p className="cost-result">Total Cost: ${totalCost}</p>
         )}
+      </section>
+
+      {/* ⭐ Match Skills Section */}
+      <section className="match-section">
+        <h3>Find My Match</h3>
+
+        <div className="match-form">
+          <label>
+            Preferred Category:
+            <input
+              type="text"
+              value={matchCategory}
+              onChange={(e) => setMatchCategory(e.target.value)}
+              placeholder="e.g., Programming"
+            />
+          </label>
+
+          <label>
+            Maximum Price:
+            <input
+              type="number"
+              value={matchPrice}
+              onChange={(e) => setMatchPrice(e.target.value)}
+              placeholder="e.g., 25"
+            />
+          </label>
+
+          <button onClick={handleMatchSkills}>Find Match</button>
+        </div>
+
+        <div className="skills-grid">
+          {matchedSkills.map((skill, index) => (
+            <SkillCard
+              key={index}
+              title={skill.title}
+              description={`Category: ${skill.category}`}
+              price={skill.price}
+              provider="Skill Provider"
+            />
+          ))}
+        </div>
       </section>
     </main>
   );
