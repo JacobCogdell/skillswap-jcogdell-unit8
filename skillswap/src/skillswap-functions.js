@@ -9,7 +9,8 @@ export function filterSkillsByCategory(skills, category) {
 
 // --- Function 2: Calculate Total Costs ---
 export function calculateTotalCosts(rate, hours) {
-  // TDD implementation goes here
+  return rate * hours;
+
 }
 
 // --- Function 3: Match Skills to User ---

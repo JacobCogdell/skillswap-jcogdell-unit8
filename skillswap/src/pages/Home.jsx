@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { filterSkillsByCategory } from "../skillswap-functions.js";
+import { filterSkillsByCategory, calculateTotalCosts } from "../skillswap-functions.js";
 import SkillCard from "../components/SkillCard";
 
 const skills = [
@@ -10,8 +10,19 @@ const skills = [
 ];
 
 function Home() {
+  // Filtering state
   const [selectedCategory, setSelectedCategory] = useState("All");
   const filteredSkills = filterSkillsByCategory(skills, selectedCategory);
+
+  // Cost calculator state
+  const [rate, setRate] = useState("");
+  const [hours, setHours] = useState("");
+  const [totalCost, setTotalCost] = useState(null);
+
+  function handleCalculate() {
+    const result = calculateTotalCosts(Number(rate), Number(hours));
+    setTotalCost(result);
+  }
 
   return (
     <main>
@@ -43,6 +54,37 @@ function Home() {
             />
           ))}
         </div>
+      </section>
+
+      {/* ⭐ Cost Calculator Section */}
+      <section className="cost-section">
+        <h3>Cost Calculator</h3>
+
+        <div className="cost-form">
+          <label>
+            Hourly Rate:
+            <input
+              type="number"
+              value={rate}
+              onChange={(e) => setRate(e.target.value)}
+            />
+          </label>
+
+          <label>
+            Hours:
+            <input
+              type="number"
+              value={hours}
+              onChange={(e) => setHours(e.target.value)}
+            />
+          </label>
+
+          <button onClick={handleCalculate}>Calculate</button>
+        </div>
+
+        {totalCost !== null && (
+          <p className="cost-result">Total Cost: ${totalCost}</p>
+        )}
       </section>
     </main>
   );
