@@ -15,5 +15,11 @@ export function calculateTotalCosts(rate, hours) {
 
 // --- Function 3: Match Skills to User ---
 export function matchSkillsToUser(userNeeds, skills) {
-  // TDD implementation goes here
+  const { category, maxPrice } = userNeeds;
+
+  return skills.filter(skill =>
+    skill.category === category &&
+    skill.price <= maxPrice
+  );
+
 }
