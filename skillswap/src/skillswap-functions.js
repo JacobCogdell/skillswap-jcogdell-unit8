@@ -1,6 +1,10 @@
 // --- Function 1: Filter Skills ---
 export function filterSkillsByCategory(skills, category) {
-  // TDD implementation goes here
+  if (category === 'All') {
+    return skills;
+  }
+
+  return skills.filter(skill => skill.category === category);
 }
 
 // --- Function 2: Calculate Total Costs ---
